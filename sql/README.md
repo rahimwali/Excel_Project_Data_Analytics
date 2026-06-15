@@ -1,45 +1,257 @@
-Albany Analyst Job Market Analysis
-Introduction
+# Albany Analyst Job Market Analysis
 
-This project explores the 2023 Albany, NY analyst job market using SQL. The goal was to identify the highest-paying opportunities, determine which skills employers value most, and discover which technical skills provide the strongest balance between salary and demand.
+## Introduction
 
-Background
+This project explores the **2023 Albany, NY analyst job market** using SQL. The goal was to identify the highest-paying opportunities, determine which skills employers value most, and discover which technical skills provide the strongest balance between salary and demand.
 
-As an aspiring data professional, I wanted to answer practical career questions:
+By focusing on a single region, this project provides practical insights for aspiring analysts looking to enter the local job market.
 
-What analyst jobs pay the most in my area?
-What skills do those jobs require?
-Which skills appear most often in job postings?
-Which skills lead to higher salaries?
-Which combination of skills offers the best long-term value?
+## Background
 
-The analysis uses the 2023 Data Jobs dataset and focuses specifically on analyst roles located in Albany, New York.
+As an aspiring data professional, I wanted to answer a few career-focused questions:
 
-Tools Used
-SQL for data exploration and analysis
-PostgreSQL for querying the dataset
-VS Code for development
-Git & GitHub for version control and project management
-CSV exports for organizing and presenting query results
-Analysis
+* What analyst jobs pay the most in Albany?
+* What skills do those jobs require?
+* Which skills appear most often in job postings?
+* Which skills are associated with higher salaries?
+* Which combination of skills provides the best long-term value?
 
-Five SQL queries were used to investigate the local analyst job market:
+The analysis uses the **2023 Data Jobs dataset** and focuses specifically on analyst roles located in **Albany, New York**.
 
-Identify the highest-paying entry and junior analyst jobs.
-Determine the skills required for those positions.
-Analyze the most in-demand skills across analyst postings.
-Compare average salaries associated with different skills.
-Identify the skills that provide the best combination of demand and salary.
+## Project Structure
 
-The results show that Albany has a strong public-sector and healthcare analytics presence, with employers consistently seeking candidates who possess a blend of traditional analytics and modern data skills.
+### SQL Queries
 
-What I Learned
-Local market trends can differ significantly from national trends.
-SQL and Excel remain essential skills despite the growth of newer technologies.
-Python and R provide strong salary potential while maintaining healthy demand.
-Government and enterprise employers continue to rely heavily on established analytics tools such as SAS.
-Conclusions
+* [Top Paying Jobs](/project/01_top_paying_jobs.sql)
+* [Top Paying Job Skills](/project/02_top_paying_job_skills.sql)
+* [Most Demenaded Skills](/project/03_highest_demanded_skills.sql)
+* [Highest Paying Skills](/project/04_highest_paying_skills.sql)
+* [Most Optimal Skills](/project/05_optimal_skills.sql)
 
-This analysis suggests that the strongest path for an aspiring analyst in the Albany market is to build a foundation in SQL, Excel, and Python, while strengthening that foundation with SAS or R and a visualization tool such as Tableau.
+## Tools Used
 
-By combining salary analysis with skill demand, this project highlights the technologies that can provide the greatest career value for analyst roles in the region.
+* **SQL** – Used to query, filter, aggregate, and analyze the job market data.
+* **PostgreSQL** – Used as the database management system for executing SQL queries.
+* **VS Code** – Used to write, test, and organize SQL scripts.
+* **Git & GitHub** – Used for version control and project documentation.
+* **CSV Exports** – Used to store and review query results for further analysis.
+
+
+<br>
+<br>
+
+# Analysis
+
+## Query 1: Highest-Paying Entry & Junior Analyst Jobs
+
+**Objective:** Identify the highest-paying entry and junior analyst opportunities in Albany, NY.
+
+```sql
+SELECT
+  job_id,
+  job_title,
+  job_location,
+  job_schedule_type,
+  salary_year_avg,
+  job_posted_date,
+  name AS company_name
+FROM job_postings_fact
+LEFT JOIN company_dim
+  ON job_postings_fact.company_id = company_dim.company_id
+WHERE
+  job_title LIKE '%Analyst%'
+  AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+  AND job_location = 'Albany, NY'
+  AND salary_year_avg IS NOT NULL
+ORDER BY salary_year_avg DESC;
+```
+
+### Key Insights
+
+* New York State agencies dominate the local analyst job market.
+* Most higher-paying entry and junior analyst roles fall between **$89K and $93K**.
+* Healthcare and government organizations account for many local opportunities.
+
+**Full Query:** `/project/01_top_paying_jobs.sql`
+
+---
+
+## Query 2: Skills Required for the Highest-Paying Jobs
+
+**Objective:** Determine which skills are required for Albany's highest-paying analyst roles.
+
+```sql
+WITH top_paying_jobs AS (
+    SELECT
+      job_id,
+      job_title,
+      salary_year_avg,
+      name AS company_name
+    FROM job_postings_fact
+    LEFT JOIN company_dim
+      ON job_postings_fact.company_id = company_dim.company_id
+    WHERE
+      job_title LIKE '%Analyst%'
+      AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+      AND job_location = 'Albany, NY'
+      AND salary_year_avg IS NOT NULL
+)
+
+SELECT
+  top_paying_jobs.*,
+  skills_dim.skills
+FROM top_paying_jobs
+INNER JOIN skills_job_dim
+  ON top_paying_jobs.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim
+  ON skills_job_dim.skill_id = skills_dim.skill_id;
+```
+
+### Key Insights
+
+* SQL, SAS, Python, R, and Excel appear consistently across higher-paying positions.
+* Enterprise technologies such as Oracle and SQL Server appear in several top-paying roles.
+* Strong technical foundations increase access to better-paying analyst opportunities.
+
+**Full Query:** `/project/02_top_paying_job_skills.sql`
+
+---
+
+## Query 3: Most In-Demand Skills
+
+**Objective:** Identify the skills employers request most often in Albany analyst job postings.
+
+```sql
+SELECT
+  skills_dim.skills,
+  COUNT(skills_job_dim.job_id) AS demand_count
+FROM job_postings_fact
+INNER JOIN skills_job_dim
+  ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim
+  ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+  job_title LIKE '%Analyst%'
+  AND job_location = 'Albany, NY'
+GROUP BY skills_dim.skills
+ORDER BY demand_count DESC
+LIMIT 10;
+```
+
+### Key Insights
+
+* SQL, SAS, and Excel form the foundation of the Albany analyst market.
+* Python, Tableau, and R demonstrate strong demand for programming and visualization skills.
+* Business communication tools remain valuable for reporting and collaboration.
+
+**Full Query:** `/project/03_most_demanded_skills.sql`
+
+---
+
+## Query 4: Highest-Paying Skills
+
+**Objective:** Discover which technical skills are associated with the highest salaries.
+
+```sql
+SELECT
+  skills_dim.skills,
+  ROUND(AVG(job_postings_fact.salary_year_avg),0) AS avg_salary,
+  COUNT(skills_job_dim.job_id) AS demand_count
+FROM job_postings_fact
+INNER JOIN skills_job_dim
+  ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim
+  ON skills_job_dim.skill_id = skills_dim.skill_id
+WHERE
+  job_title LIKE '%Analyst%'
+  AND job_location = 'Albany, NY'
+  AND salary_year_avg IS NOT NULL
+GROUP BY skills_dim.skills
+ORDER BY avg_salary DESC
+LIMIT 25;
+```
+
+### Key Insights
+
+* Python and R provide one of the strongest combinations of salary and market demand.
+* Specialized technologies such as SQL Server and Azure command high salaries but appear less frequently.
+* Traditional analytics tools such as SAS and SQL continue to provide strong long-term value.
+
+**Full Query:** `/project/04_highest_paying_skills.sql`
+
+---
+
+## Query 5: Most Optimal Skills
+
+**Objective:** Find the skills that provide the best balance between demand and salary.
+
+```sql
+WITH skills_demand AS (
+    SELECT
+      skills_dim.skill_id,
+      skills_dim.skills,
+      COUNT(skills_job_dim.job_id) AS demand_count
+    FROM job_postings_fact
+    INNER JOIN skills_job_dim
+      ON job_postings_fact.job_id = skills_job_dim.job_id
+    INNER JOIN skills_dim
+      ON skills_job_dim.skill_id = skills_dim.skill_id
+    WHERE
+      job_title LIKE '%Analyst%'
+      AND job_location = 'Albany, NY'
+      AND salary_year_avg IS NOT NULL
+    GROUP BY skills_dim.skill_id
+)
+
+SELECT
+  skills_demand.skill_id,
+  skills_demand.skills,
+  skills_demand.demand_count
+FROM skills_demand
+ORDER BY demand_count DESC;
+```
+
+### Key Insights
+
+* SQL, Python, R, and SAS offer the best balance between demand and salary.
+* Excel remains a foundational skill that supports nearly every analyst role.
+* Tableau and SharePoint can strengthen an analyst portfolio through reporting and visualization.
+
+**Full Query:** `/project/05_optimal_skills.sql`
+
+<br>
+<br>
+
+# What I Learned
+
+Through this project, I strengthened several SQL concepts:
+
+* Built multi-step analyses using **Common Table Expressions (CTEs)**.
+* Combined multiple tables using **INNER JOINs and LEFT JOINs** to connect job postings and skill data.
+* Applied **aggregate functions, filtering, grouping, and sorting** to transform raw data into actionable insights.
+
+<br>
+<br>
+
+# Conclusions
+
+## Main Findings
+
+* Albany's analyst market is heavily influenced by **government and public-sector employers**.
+* Higher-paying analyst roles consistently require a core set of technical skills.
+* **SQL, SAS, and Excel** are the most commonly requested skills.
+* **Python and R** provide strong earning potential while maintaining healthy demand.
+* The best long-term strategy is to develop skills that balance both salary and employer demand.
+
+## Skills to Focus On for the Albany Market
+
+Based on this analysis, the strongest skill stack for aspiring analysts in Albany is:
+
+* SQL
+* Excel
+* Python
+* SAS or R
+* Tableau
+* Basic enterprise reporting and collaboration tools
+
+Developing these skills provides a strong foundation for both entry-level opportunities and long-term career growth within the Albany analyst job market.
