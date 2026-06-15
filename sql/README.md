@@ -22,11 +22,11 @@ The analysis uses the **2023 Data Jobs dataset** and focuses specifically on ana
 
 ### SQL Queries
 
-* [Top Paying Jobs](/project/01_top_paying_jobs.sql)
-* [Top Paying Job Skills](/project/02_top_paying_job_skills.sql)
-* [Most Demenaded Skills](/project/03_highest_demanded_skills.sql)
-* [Highest Paying Skills](/project/04_highest_paying_skills.sql)
-* [Most Optimal Skills](/project/05_optimal_skills.sql)
+* [Top Paying Jobs](project/01_top_paying_jobs.sql)
+* [Top Paying Job Skills](project/02_top_paying_job_skills.sql)
+* [Most Demenaded Skills](project/03_highest_demanded_skills.sql)
+* [Highest Paying Skills](project/04_highest_paying_skills.sql)
+* [Most Optimal Skills](project/05_optimal_skills.sql)
 
 ## Tools Used
 
@@ -72,7 +72,7 @@ ORDER BY salary_year_avg DESC;
 * Most higher-paying entry and junior analyst roles fall between **$89K and $93K**.
 * Healthcare and government organizations account for many local opportunities.
 
-**Full Query:** `/project/01_top_paying_jobs.sql`
+[**See Full Query**](project/01_top_paying_jobs.sql)
 
 ---
 
@@ -113,7 +113,7 @@ INNER JOIN skills_dim
 * Enterprise technologies such as Oracle and SQL Server appear in several top-paying roles.
 * Strong technical foundations increase access to better-paying analyst opportunities.
 
-**Full Query:** `/project/02_top_paying_job_skills.sql`
+[**See Full Query**](project/02_top_paying_job_skills.sql)
 
 ---
 
@@ -144,7 +144,7 @@ LIMIT 10;
 * Python, Tableau, and R demonstrate strong demand for programming and visualization skills.
 * Business communication tools remain valuable for reporting and collaboration.
 
-**Full Query:** `/project/03_most_demanded_skills.sql`
+[**See Full Query**](project/03_highest_demanded_skills.sql)
 
 ---
 
@@ -177,7 +177,7 @@ LIMIT 25;
 * Specialized technologies such as SQL Server and Azure command high salaries but appear less frequently.
 * Traditional analytics tools such as SAS and SQL continue to provide strong long-term value.
 
-**Full Query:** `/project/04_highest_paying_skills.sql`
+[**See Full Query**](project/04_highest_paying_skills.sql)
 
 ---
 
@@ -217,7 +217,7 @@ ORDER BY demand_count DESC;
 * Excel remains a foundational skill that supports nearly every analyst role.
 * Tableau and SharePoint can strengthen an analyst portfolio through reporting and visualization.
 
-**Full Query:** `/project/05_optimal_skills.sql`
+[**See Full Query**](project/05_optimal_skills.sql)
 
 <br>
 <br>
