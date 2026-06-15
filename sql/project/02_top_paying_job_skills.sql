@@ -19,10 +19,10 @@ WITH top_paying_jobs AS (
   LEFT JOIN
     company_dim ON job_postings_fact.company_id = company_dim.company_id
   WHERE
-    job_title LIKE '%Analyst%' AND
-    job_title !~* '(Senior|Principal|3|4|Lead|Chief)' AND
-    job_location = 'Albany, NY' AND
-    salary_year_avg IS NOT NULL
+    job_title LIKE '%Analyst%'
+    AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+    AND job_location = 'Albany, NY'
+    AND salary_year_avg IS NOT NULL
   ORDER BY
     salary_year_avg DESC
   LIMIT 10
@@ -41,9 +41,7 @@ ORDER BY
 Key Insights (Entry-Level Albany Analyst Jobs)
 
     - SQL, SAS, Python, R, and Excel appear repeatedly across the top-paying positions.
-
-    - Many of the highest-paying roles combine technical skills with enterprise tools such as Oracle, SQL Server, and SSIS.
-    
+    - Many of the highest-paying roles combine technical skills with enterprise tools such as Oracle, SQL Server, and SSIS.   
     - The data suggests that developing a strong core analytics stack provides access to a wider range of higher-paying opportunities.
 
 */

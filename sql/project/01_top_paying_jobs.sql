@@ -24,10 +24,10 @@ FROM
 LEFT JOIN
   company_dim ON job_postings_fact.company_id = company_dim.company_id
 WHERE
-  job_title LIKE '%Analyst%' AND
-  job_title !~* '(Senior|Principal|3|4|Lead|Chief)' AND
-  job_location = 'Albany, NY' AND
-  salary_year_avg IS NOT NULL
+  job_title LIKE '%Analyst%'
+  AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+  AND job_location = 'Albany, NY'
+  AND salary_year_avg IS NOT NULL
 ORDER BY
   salary_year_avg DESC
 LIMIT 20
@@ -37,9 +37,7 @@ LIMIT 20
 Key Insights
 
     - The Albany analyst market is heavily dominated by New York State agencies and public-sector organizations.
-
     - Most higher-paying entry and junior analyst positions fall within a salary range of $89K–$93K.
-    
     - Healthcare and government-related data roles make up a significant portion of local opportunities.
 
 

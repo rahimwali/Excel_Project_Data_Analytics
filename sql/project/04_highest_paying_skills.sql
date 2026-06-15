@@ -15,9 +15,9 @@ FROM job_postings_fact
 INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
 INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
-  job_title LIKE '%Analyst%' AND
-  job_location = 'Albany, NY' AND
-  salary_year_avg IS NOT NULL
+  job_title LIKE '%Analyst%'
+  AND job_location = 'Albany, NY'
+  AND salary_year_avg IS NOT NULL
 GROUP BY
   skills_dim.skills
 HAVING 
@@ -30,9 +30,7 @@ ORDER BY
 Key Insights
 
     - Python(16) and R(20) offer one of the strongest combinations of competitive salaries and broad demand.
-    
     - Specialized technologies such as SQL Server(3), Azure(2), and Oracle(4) command higher salaries but appear in fewer postings.
-
     - Traditional analytics tools like SAS(36) and SQL(19) continue to provide strong long-term value in the Albany market.
 
 */

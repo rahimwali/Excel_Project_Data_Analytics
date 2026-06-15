@@ -66,7 +66,7 @@ WHERE
   AND salary_year_avg IS NOT NULL
 ORDER BY
   salary_year_avg DESC
-LIMIT 20
+LIMIT 20;
 ```
 
 ### Key Insights
@@ -84,30 +84,34 @@ LIMIT 20
 **Objective:** Determine which skills are required for Albany's highest-paying analyst roles.
 
 ```sql
-WITH top_paying_jobs AS (
-    SELECT
-      job_id,
-      job_title,
-      salary_year_avg,
-      name AS company_name
-    FROM job_postings_fact
-    LEFT JOIN company_dim
-      ON job_postings_fact.company_id = company_dim.company_id
-    WHERE
-      job_title LIKE '%Analyst%'
-      AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
-      AND job_location = 'Albany, NY'
-      AND salary_year_avg IS NOT NULL
+  WITH top_paying_jobs AS (
+  SELECT
+    job_id,
+    job_title,
+    salary_year_avg,
+    name as company_name
+  FROM
+    job_postings_fact
+  LEFT JOIN
+    company_dim ON job_postings_fact.company_id = company_dim.company_id
+  WHERE
+    job_title LIKE '%Analyst%'
+    AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+    AND job_location = 'Albany, NY'
+    AND salary_year_avg IS NOT NULL
+  ORDER BY
+    salary_year_avg DESC
+  LIMIT 10
 )
 
 SELECT
   top_paying_jobs.*,
   skills_dim.skills
 FROM top_paying_jobs
-INNER JOIN skills_job_dim
-  ON top_paying_jobs.job_id = skills_job_dim.job_id
-INNER JOIN skills_dim
-  ON skills_job_dim.skill_id = skills_dim.skill_id;
+INNER JOIN skills_job_dim ON top_paying_jobs.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
+ORDER BY
+  salary_year_avg DESC;
 ```
 
 ### Key Insights
@@ -129,15 +133,16 @@ SELECT
   skills_dim.skills,
   COUNT(skills_job_dim.job_id) AS demand_count
 FROM job_postings_fact
-INNER JOIN skills_job_dim
-  ON job_postings_fact.job_id = skills_job_dim.job_id
-INNER JOIN skills_dim
-  ON skills_job_dim.skill_id = skills_dim.skill_id
+INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
   job_title LIKE '%Analyst%'
   AND job_location = 'Albany, NY'
-GROUP BY skills_dim.skills
-ORDER BY demand_count DESC
+  AND job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
+GROUP BY
+  skills_dim.skills
+ORDER BY
+  demand_count DESC
 LIMIT 10;
 ```
 
@@ -158,20 +163,21 @@ LIMIT 10;
 ```sql
 SELECT
   skills_dim.skills,
-  ROUND(AVG(job_postings_fact.salary_year_avg),0) AS avg_salary,
+  ROUND(AVG(job_postings_fact.salary_year_avg), 0) AS avg_salary,
   COUNT(skills_job_dim.job_id) AS demand_count
 FROM job_postings_fact
-INNER JOIN skills_job_dim
-  ON job_postings_fact.job_id = skills_job_dim.job_id
-INNER JOIN skills_dim
-  ON skills_job_dim.skill_id = skills_dim.skill_id
+INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
+INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
   job_title LIKE '%Analyst%'
   AND job_location = 'Albany, NY'
   AND salary_year_avg IS NOT NULL
-GROUP BY skills_dim.skills
-ORDER BY avg_salary DESC
-LIMIT 25;
+GROUP BY
+  skills_dim.skills
+HAVING 
+  COUNT(skills_job_dim.job_id) >= 2
+ORDER BY
+  avg_salary DESC;
 ```
 
 ### Key Insights
@@ -189,29 +195,19 @@ LIMIT 25;
 **Objective:** Find the skills that provide the best balance between demand and salary.
 
 ```sql
-WITH skills_demand AS (
-    SELECT
-      skills_dim.skill_id,
-      skills_dim.skills,
-      COUNT(skills_job_dim.job_id) AS demand_count
-    FROM job_postings_fact
-    INNER JOIN skills_job_dim
-      ON job_postings_fact.job_id = skills_job_dim.job_id
-    INNER JOIN skills_dim
-      ON skills_job_dim.skill_id = skills_dim.skill_id
-    WHERE
-      job_title LIKE '%Analyst%'
-      AND job_location = 'Albany, NY'
-      AND salary_year_avg IS NOT NULL
-    GROUP BY skills_dim.skill_id
-)
-
 SELECT
   skills_demand.skill_id,
   skills_demand.skills,
-  skills_demand.demand_count
-FROM skills_demand
-ORDER BY demand_count DESC;
+  skills_demand.demand_count,
+  average_salary.avg_salary
+FROM
+  skills_demand
+INNER JOIN average_salary ON skills_demand.skill_id = average_salary.skill_id
+WHERE 
+  skills_demand.demand_count >= 5
+ORDER BY
+  average_salary.avg_salary DESC,
+  skills_demand.demand_count DESC;
 ```
 
 ### Key Insights

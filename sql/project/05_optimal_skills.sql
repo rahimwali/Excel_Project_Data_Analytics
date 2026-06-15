@@ -55,9 +55,7 @@ ORDER BY
 Key Insights
 
     - SQL(19), Python(16), R(20), and SAS(18) provide the strongest balance between employer demand and earning potential.
-
     - Excel(14) remains a foundational skill that complements nearly every analyst role.
-
     - Adding a visualization or collaboration tool such as Tableau(8) or SharePoint(8) can help create a more competitive analyst skill set.
 
 */
