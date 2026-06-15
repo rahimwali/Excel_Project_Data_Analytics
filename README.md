@@ -15,11 +15,40 @@ The goal is to help aspiring data professionals better understand the job market
 ## Projects
 
 ### Excel Dashboard
+
+Built using Excel with **Power Query, Power Pivot, and DAX**.
+
+Focus areas:
+
+* Data cleaning and transformation in Power Query
+* Data modeling using Power Pivot (star schema structure)
+* DAX measures for salary and skill analysis
+* Interactive dashboard for role and skill exploration
 Interactive dashboard built with Excel, Power Query, Power Pivot, and DAX.
 
 ➡️ [View Project](./excel)
 
 ### Power BI Dashboard
-Interactive dashboard built with Power BI, Power Query, DAX, and data modeling techniques.
+Built using Power BI with **Power Query, DAX, and relational data modeling**.
+
+Focus areas:
+
+* Scalable data model design
+* Advanced DAX measures for comparative analysis
+* Interactive visual storytelling (filters, drilldowns, slicers)
+* Cross-role salary and skill demand comparisons
 
 ➡️ [View Project](./power-BI)
+
+#### SQL Analysis Project
+
+Built using SQL for structured querying and exploratory analysis of the same dataset.
+
+Focus areas:
+
+* Data extraction and aggregation using SQL queries
+* Joins across job postings and skills tables
+* Ranking and filtering high-demand / high-paying roles
+* Foundation layer for BI dashboard outputs
+
+➡️ [View Project](./sql)
