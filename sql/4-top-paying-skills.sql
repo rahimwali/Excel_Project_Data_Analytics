@@ -20,30 +20,19 @@ WHERE
   salary_year_avg IS NOT NULL
 GROUP BY
   skills_dim.skills
+HAVING 
+  COUNT(skills_job_dim.job_id) >= 2
 ORDER BY
   avg_salary DESC
-LIMIT 25
 
 /*
 
 Key Insights
 
-  - SAS (36), R (20), SQL (19), Python (16), and Excel (14) are the most in-demand skills for analyst 
-      roles in the Albany market, forming the core technical stack.
+    - Python(16) and R(20) offer one of the strongest combinations of competitive salaries and broad demand.
+    
+    - Specialized technologies such as SQL Server(3), Azure(2), and Oracle(4) command higher salaries but appear in fewer postings.
 
-  - Python offers one of the strongest value propositions, combining high demand 
-      (16 postings) with a relatively high average salary (~$97K).
-
-  - Specialized technologies such as PowerShell, Bash, Linux, and PostgreSQL command the highest salaries, 
-      but each appeared in only one posting, suggesting niche rather than widespread demand.
-  
-  - Tableau and SharePoint show moderate demand, indicating that data visualization and 
-      enterprise collaboration skills can strengthen an analyst profile.
-  
-  - The data suggests that Albany's analyst market has a strong government and enterprise 
-      analytics focus, with heavy demand for traditional statistical tools like SAS and R.
-  
-  - For job seekers, the most practical skill combination is SQL + Excel + Python, with 
-      SAS or R providing a competitive advantage for the local market.
+    - Traditional analytics tools like SAS(36) and SQL(19) continue to provide strong long-term value in the Albany market.
 
 */

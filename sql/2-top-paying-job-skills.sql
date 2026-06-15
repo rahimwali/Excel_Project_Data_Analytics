@@ -12,10 +12,7 @@ WITH top_paying_jobs AS (
   SELECT
     job_id,
     job_title,
-    job_location,
-    job_schedule_type,
     salary_year_avg,
-    job_posted_date,
     name as company_name
   FROM
     job_postings_fact
@@ -28,6 +25,7 @@ WITH top_paying_jobs AS (
     salary_year_avg IS NOT NULL
   ORDER BY
     salary_year_avg DESC
+  LIMIT 10
 )
 
 SELECT
@@ -41,18 +39,11 @@ ORDER BY
 
 /*
 Key Insights (Entry-Level Albany Analyst Jobs)
-  - Analyzed 14 entry-level analyst job postings in the Albany, NY market (2023).
-  
-  - Most in-demand skills: SAS (10), SQL (9), Excel (4), R (4), Python (4), and Microsoft Flow (4).
 
-  - Specialized skills such as Oracle, Tableau, Power BI, SPSS, SSIS, JavaScript, and SharePoint appeared only occasionally, 
-      suggesting they are role-specific rather than baseline requirements.
+    - SQL, SAS, Python, R, and Excel appear repeatedly across the top-paying positions.
 
-  - Salaries ranged from $55K–$92.5K, with an average of approximately $75.5K.
+    - Many of the highest-paying roles combine technical skills with enterprise tools such as Oracle, SQL Server, and SSIS.
+    
+    - The data suggests that developing a strong core analytics stack provides access to a wider range of higher-paying opportunities.
 
-  - Many postings came from New York State agencies and public-sector organizations, 
-      reinforcing the importance of traditional analytics tools and enterprise software.
-
-  - The data suggests that an entry-level candidate targeting this market should prioritize SQL, Excel, Python, and SAS, 
-      with familiarity in reporting and business intelligence tools providing additional value.
 */

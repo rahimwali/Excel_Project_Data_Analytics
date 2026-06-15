@@ -45,25 +45,19 @@ FROM
   skills_demand
 INNER JOIN average_salary ON skills_demand.skill_id = average_salary.skill_id
 WHERE 
-  skills_demand.demand_count > 5
+  skills_demand.demand_count >= 5
 ORDER BY
   average_salary.avg_salary DESC,
-  skills_demand.demand_count DESC
-LIMIT 25;
+  skills_demand.demand_count DESC;
 
 /*
 
 Key Insights
 
-    - SQL (19), R (20), SAS (18), and Python (16) provide the strongest combination of high demand and strong salaries.
+    - SQL(19), Python(16), R(20), and SAS(18) provide the strongest balance between employer demand and earning potential.
 
-    - Python (~$97K) and R (~$96K) offer the highest average salaries among widely requested skills.
+    - Excel(14) remains a foundational skill that complements nearly every analyst role.
 
-    - SQL and Excel remain essential foundational skills, appearing in 19 and 14 postings respectively.
-
-    - Tableau and SharePoint have moderate demand, making them valuable complementary skills for reporting and business intelligence.
-
-    - The data suggests that the most competitive analyst skill stack for the Albany market is SQL + Excel + Python, 
-        supplemented by SAS or R and a visualization tool like Tableau.
+    - Adding a visualization or collaboration tool such as Tableau(8) or SharePoint(8) can help create a more competitive analyst skill set.
 
 */

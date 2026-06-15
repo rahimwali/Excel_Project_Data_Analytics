@@ -1,5 +1,5 @@
 /*
-Question: What are the top paying general anaylst jobs?
+Question: What are the highest-paying entry and junior analyst jobs in Albany, NY?
 
   - Identify the top paying analyst roles that are available locally
   - Focuses on job postings with specified salaries (ignore null values)
@@ -16,7 +16,7 @@ SELECT
   job_title,
   job_location,
   job_schedule_type,
-  salary_year_avg,
+  ROUND(salary_year_avg) AS average_salary,
   job_posted_date,
   name as company_name
 FROM
@@ -30,3 +30,17 @@ WHERE
   salary_year_avg IS NOT NULL
 ORDER BY
   salary_year_avg DESC
+LIMIT 20
+
+/*
+
+Key Insights
+
+    - The Albany analyst market is heavily dominated by New York State agencies and public-sector organizations.
+
+    - Most higher-paying entry and junior analyst positions fall within a salary range of $89K–$93K.
+    
+    - Healthcare and government-related data roles make up a significant portion of local opportunities.
+
+
+*/

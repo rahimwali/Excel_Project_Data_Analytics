@@ -12,7 +12,8 @@ INNER JOIN skills_job_dim ON job_postings_fact.job_id = skills_job_dim.job_id
 INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 WHERE
   job_title LIKE '%Analyst%' AND
-  job_location = 'Albany, NY'
+  job_location = 'Albany, NY' AND
+  job_title !~* '(Senior|Principal|3|4|Lead|Chief)'
 GROUP BY
   skills_dim.skills
 ORDER BY
@@ -22,17 +23,9 @@ LIMIT 10
 /*
 Key Insights
 
-  - SAS (128), SQL (114), and Excel (97) are the most requested skills, making them the 
-      foundation of the Albany analyst market.
-  
-  - Python (79), Tableau (68), and R (66) are also in strong demand, showing the importance of 
-      programming and data visualization.
-  
-  - Microsoft Office skills such as Word (43) and PowerPoint (30) remain valuable for reporting 
-      and stakeholder communication.
-  
-  - Power BI (26) and Microsoft Flow (24) appear less frequently but can help differentiate candidates.
-  
-  - The data suggests that the strongest skill set for Albany analyst roles is SQL + Excel + Python, 
-      with SAS and Tableau providing a significant competitive advantage.
+    - SQL(86), SAS(72), and Excel(70) are the three most frequently requested skills in the local market.
+
+    - Programming and visualization skills, including Python(54), Tableau(45), and R(38), are also consistently sought after.
+
+    - Communication and reporting tools such as Word(27), Power BI(23), and PowerPoint(15) remain valuable supporting skills.
 */
